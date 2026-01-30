@@ -28,8 +28,10 @@ def test_lock_method():
 def test_read_method_locked():
     diary = Mock()
     diary.contents = 'These are my contents'
+    diary.read.return_value = 'These are my contents'
     secret_diary = SecretDiary(diary)
     assert secret_diary.read() == 'Go away!'
+    diary.read.assert_not_called()
 
 def test_read_method_unlocked():
     diary = Mock()
@@ -38,3 +40,4 @@ def test_read_method_unlocked():
     secret_diary = SecretDiary(diary)
     secret_diary.unlock()
     assert secret_diary.read() == 'These are my contents'
+    diary.read.assert_called()
